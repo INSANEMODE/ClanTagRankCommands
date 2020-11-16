@@ -25,14 +25,14 @@ namespace WebfrontCore.Controllers.API
         [HttpGet("{clientname}")]
         public IActionResult Clientname(string clientname)
         {
-            
+
             var clientInfo = Manager.GetActiveClients()
                 .FirstOrDefault(c => c.Name == clientname);
 
             if (clientInfo != null)
             {
 
-                switch((int)clientInfo.Level)
+                switch ((int)clientInfo.Level)
                 {
                     case 0:
                         rankName = "User";
@@ -50,7 +50,7 @@ namespace WebfrontCore.Controllers.API
                         rankName = "Admin";
                         break;
                     case 5:
-                        rankName = "Sr.Admin";
+                        rankName = "SrAdmin";
                         break;
                     case 6:
                         rankName = "Owner";

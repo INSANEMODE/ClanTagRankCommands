@@ -10,7 +10,7 @@ namespace ClanTagRankApi
     {
         private readonly IConfigurationHandler<Configuration> _configurationHandler;
         private Configuration Config;
-
+        readonly string rank = "rank";
 
 
 
@@ -41,8 +41,19 @@ namespace ClanTagRankApi
             
             return Task.CompletedTask;
         }
-        public Task OnEventAsync(GameEvent E, Server S) => Task.CompletedTask;
-
+        public async Task OnEventAsync(GameEvent E, Server S)// => Task.CompletedTask;
+        {
+            if (E.Type == GameEvent.EventType.Join)
+            {
+                var rank_player_var = await _metaService.GetPersistentMeta(rank, E.Target);
+                if (rank_player_var == null)
+                {
+                    await _metaService.AddPersistentMeta(rank, "none", E.Target);
+                    rank_player_var = await _metaService.GetPersistentMeta(rank, E.Target);
+                }
+            }
+            //return Task.CompletedTask;
+        }
         public Task OnTickAsync(Server S)// =>
         {
 
