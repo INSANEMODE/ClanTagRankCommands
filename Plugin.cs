@@ -16,13 +16,13 @@ namespace ClanTagRankApi
 
         public string Name => "ClanTagRankApi";
 
-        public float Version => 1.01f;
+        public float Version => 1.1f;
 
         public string Author => "INSANEMODE";
 
         private readonly IMetaService _metaService;
 
-        public Plugin(IMetaService metaService, IConfigurationHandlerFactory configurationHandlerFactory)
+        public Plugin(IMetaService metaService, IConfigurationHandlerFactory configurationHandlerFactory) 
         {
             _metaService = metaService;
             _configurationHandler = (IConfigurationHandler<Configuration>)configurationHandlerFactory.GetConfigurationHandler<Configuration>("ClanTagRankApi");
