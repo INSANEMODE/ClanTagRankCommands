@@ -34,11 +34,14 @@ namespace WebfrontCore.Controllers.API
 
                 switch ((int)clientInfo.Level)
                 {
+                    case -1:
+                        rankName = "Banned";  //this typically won't be seen. 
+                        break;
                     case 0:
                         rankName = "User";
                         break;
                     case 1:
-                        rankName = "User";
+                        rankName = "User";  //1 = flagged, but don't want to show this in game.
                         break;
                     case 2:
                         rankName = "Trusted";
