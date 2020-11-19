@@ -1,6 +1,5 @@
 ﻿using SharedLibraryCore;
 using SharedLibraryCore.Interfaces;
-using System.Diagnostics.Tracing;
 using System.Threading.Tasks;
 using System.Threading;
 using SharedLibraryCore.Database.Models;

@@ -71,17 +71,9 @@ namespace ClanTagRankApi.Commands
             }
             else
             {
-                //rank_player_var = await _metaService.GetPersistentMeta(rank, E.Target);
-                E.Origin.Tell($"invalid rank length (between 1-8 characters), set rank to none to reset");
+                E.Origin.Tell($"invalid rank length (between 1-8 characters), set rank to none, or use !ResetRank to reset");
             }
 
-            //var cmd = new ScriptCommand()
-            //{
-
-            //    CommandName = "setrank",
-            //    ClientNumber = E.Target.ClientNumber,
-            //    CommandArguments = new[] {rank_string }
-            //};
 
             await E.Owner.ExecuteCommandAsync("setrank" + " " + E.Target.ClientNumber + " " + rank_string);
         }

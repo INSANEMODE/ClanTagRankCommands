@@ -1,7 +1,6 @@
-﻿using SharedLibraryCore;
+﻿
 using SharedLibraryCore.Database.Models;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace ClanTagRankApi
 {
