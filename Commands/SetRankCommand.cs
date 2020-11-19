@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 
 
-namespace IW4ScriptCommands.Commands
+namespace ClanTagRankApi.Commands
 {
     /// <summary>
     /// Example script command
@@ -55,15 +55,27 @@ namespace IW4ScriptCommands.Commands
                 await _metaService.AddPersistentMeta(rank, rank_string, E.Target);
                 rank_player_var = await _metaService.GetPersistentMeta(rank, E.Target);
                 if(rank_player_var.Value == "none" || rank_player_var.Value == "None" || rank_player_var.Value == "NONE")
-                    E.Origin.Tell(E.Target.Name + "'s Rank reset to none");
+                {
+                    //E.Origin.Tell(E.Target.Name + "'s rank has been reset");
+                    rank_string = E.Target.Level.ClanTag();
+                    E.Origin.Tell(E.Target.Name + "'s rank has been reset to: " + rank_string);
 
-                E.Origin.Tell("New rank set: [" + rank_player_var.Value + "]" + E.Target.Name);
+                }
+
+                else
+                {
+                    rank_string = rank_player_var.Value;
+                    E.Origin.Tell("New rank set: [" + rank_player_var.Value + "]" + E.Target.Name);
+
+                }
             }
             else
             {
-                //rank_player_var = await _metaService.GetPersistentMeta(rank, E.Target);
-                E.Origin.Tell($"invalid rank length (between 1-8 characters), set rank to none to reset");
+                E.Origin.Tell($"invalid rank length (between 1-8 characters), set rank to none, or use !ResetRank to reset");
             }
+
+
+            await E.Owner.ExecuteCommandAsync("setrank" + " " + E.Target.ClientNumber + " " + rank_string);
         }
     }
 }

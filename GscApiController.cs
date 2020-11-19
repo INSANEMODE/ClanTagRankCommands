@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ClanTagRankApi;
+using Microsoft.AspNetCore.Mvc;
 using SharedLibraryCore;
 using SharedLibraryCore.Database.Models;
 using SharedLibraryCore.Interfaces;
@@ -35,41 +36,7 @@ namespace WebfrontCore.Controllers.API
             if (clientInfo != null)
             {
 
-                switch ((int)clientInfo.Level)
-                {
-                    case -1:
-                        rankName = "Banned";  //this typically won't be seen. 
-                        break;
-                    case 0:
-                        rankName = "User";
-                        break;
-                    case 1:
-                        rankName = "User";  //1 = flagged, but don't want to show this in game.
-                        break;
-                    case 2:
-                        rankName = "Trusted";
-                        break;
-                    case 3:
-                        rankName = "Mod";
-                        break;
-                    case 4:
-                        rankName = "Admin";
-                        break;
-                    case 5:
-                        rankName = "SrAdmin";
-                        break;
-                    case 6:
-                        rankName = "Owner";
-                        break;
-                    case 7:
-                        rankName = "Creator";
-                        break;
-                    case 8:
-                        rankName = "Console";
-                        break;
-                    default:
-                        break;
-                }
+                rankName = clientInfo.Level.ClanTag();
 
                 customRankName = await _metaService.GetPersistentMeta("rank", clientInfo);
                 if (customRankName == null)
@@ -103,41 +70,7 @@ namespace WebfrontCore.Controllers.API
             if (clientInfo != null)
             {
 
-                switch ((int)clientInfo.Level)
-                {
-                    case -1:
-                        rankName = "Banned";  //this typically won't be seen. 
-                        break;
-                    case 0:
-                        rankName = "User";
-                        break;
-                    case 1:
-                        rankName = "User";  //1 = flagged, but don't want to show this in game.
-                        break;
-                    case 2:
-                        rankName = "Trusted";
-                        break;
-                    case 3:
-                        rankName = "Mod";
-                        break;
-                    case 4:
-                        rankName = "Admin";
-                        break;
-                    case 5:
-                        rankName = "SrAdmin";
-                        break;
-                    case 6:
-                        rankName = "Owner";
-                        break;
-                    case 7:
-                        rankName = "Creator";
-                        break;
-                    case 8:
-                        rankName = "Console";
-                        break;
-                    default:
-                        break;
-                }
+                rankName = clientInfo.Level.ClanTag();
 
                 customRankName = await _metaService.GetPersistentMeta("rank", clientInfo);
                 if (customRankName == null)

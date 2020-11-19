@@ -1,6 +1,9 @@
 ﻿using SharedLibraryCore;
 using SharedLibraryCore.Interfaces;
 using System.Threading.Tasks;
+using System.Threading;
+using SharedLibraryCore.Database.Models;
+using System.Collections.Generic;
 
 
 namespace ClanTagRankApi
@@ -11,12 +14,13 @@ namespace ClanTagRankApi
         private readonly IConfigurationHandler<Configuration> _configurationHandler;
         private Configuration Config;
         readonly string rank = "rank";
+        string rankName = "none";
 
 
 
         public string Name => "ClanTagRankApi";
 
-        public float Version => 1.1f;
+        public float Version => 1.3f;
 
         public string Author => "INSANEMODE";
 
@@ -43,14 +47,53 @@ namespace ClanTagRankApi
         }
         public async Task OnEventAsync(GameEvent E, Server S)// => Task.CompletedTask;
         {
-            if (E.Type == GameEvent.EventType.Join)
+            if (E.Type == GameEvent.EventType.Join ||E.Type == GameEvent.EventType.ChangePermission)
             {
-                var rank_player_var = await _metaService.GetPersistentMeta(rank, E.Target);
+                Thread.Sleep(10000);
+                var rank_player_var = await _metaService.GetPersistentMeta(rank, E.Origin);
+                rankName = E.Origin.Level.ClanTag();
+
+                rank_player_var = await _metaService.GetPersistentMeta("rank", E.Origin);
                 if (rank_player_var == null)
                 {
-                    await _metaService.AddPersistentMeta(rank, "none", E.Target);
-                    rank_player_var = await _metaService.GetPersistentMeta(rank, E.Target);
+                    await _metaService.AddPersistentMeta("rank", "none", E.Origin);
+                    rank_player_var = await _metaService.GetPersistentMeta("rank", E.Origin);
                 }
+
+                if (!(rank_player_var.Value.Contains("none")) && !(rank_player_var.Value.Contains("None")) && !(rank_player_var.Value.Contains("NONE")))
+                {
+                    rankName = rank_player_var.Value;
+
+                }
+
+                await S.ExecuteCommandAsync("setrank" + " " + E.Origin.ClientNumber + " " + rankName);
+            }
+            if (E.Type == GameEvent.EventType.Start || E.Type == GameEvent.EventType.MapEnd || E.Type == GameEvent.EventType.MapChange)
+            {
+                Thread.Sleep(10000);
+                IList<EFClient> currentclients = E.Owner.Manager.GetActiveClients();
+                foreach(EFClient client in currentclients)
+                {
+                    var rank_player_var = await _metaService.GetPersistentMeta(rank, client);
+                    rankName = client.Level.ClanTag();
+
+                    rank_player_var = await _metaService.GetPersistentMeta("rank", client);
+                    if (rank_player_var == null)
+                    {
+                        await _metaService.AddPersistentMeta("rank", "none", client);
+                        rank_player_var = await _metaService.GetPersistentMeta("rank", client);
+                    }
+
+                    if (!(rank_player_var.Value.Contains("none")) && !(rank_player_var.Value.Contains("None")) && !(rank_player_var.Value.Contains("NONE")))
+                    {
+                        rankName = rank_player_var.Value;
+
+                    }
+
+                    await S.ExecuteCommandAsync("setrank" + " " + client.ClientNumber + " " + rankName);
+
+                }
+
             }
             //return Task.CompletedTask;
         }
