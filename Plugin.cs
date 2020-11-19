@@ -20,7 +20,7 @@ namespace ClanTagRankApi
 
         public string Name => "ClanTagRankApi";
 
-        public float Version => 1.1f;
+        public float Version => 1.3f;
 
         public string Author => "INSANEMODE";
 
