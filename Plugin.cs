@@ -94,7 +94,7 @@ namespace ClanTagRankApi
 
                     }
 
-                    await S.ExecuteCommandAsync("setrank" + " " + client.ClientNumber + " " + rankName);
+                    await S.ExecuteCommandAsync("setclantag" + " " + client.ClientNumber + " " + rankName);
 
                 }
 

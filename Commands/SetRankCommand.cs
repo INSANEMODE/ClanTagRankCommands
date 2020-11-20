@@ -89,7 +89,7 @@ namespace ClanTagRankApi.Commands
             }
 
 
-            await E.Owner.ExecuteCommandAsync("setrank" + " " + E.Target.ClientNumber + " " + rank_string);
+            await E.Owner.ExecuteCommandAsync("setclantag" + " " + E.Target.ClientNumber + " " + rank_string);
         }
     }
 }
