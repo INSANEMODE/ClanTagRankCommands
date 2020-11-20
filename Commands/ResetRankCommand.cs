@@ -54,7 +54,7 @@ namespace ClanTagRankApi.Commands
             await _metaService.AddPersistentMeta(rank, rank_string, E.Target);
             rank_string = E.Target.Level.ClanTag(Config);
             E.Origin.Tell(E.Target.Name + "'s rank has been reset to: " + rank_string);
-            await E.Owner.ExecuteCommandAsync("setrank" + " " + E.Target.ClientNumber + " " + rank_string);
+            await E.Owner.ExecuteCommandAsync("setclantag" + " " + E.Target.ClientNumber + " " + rank_string);
         }
     }
 }
