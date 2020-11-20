@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using SharedLibraryCore.Database.Models;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 
 namespace ClanTagRankApi
@@ -12,24 +14,26 @@ namespace ClanTagRankApi
     public class Plugin : IPlugin
     {
         private readonly IConfigurationHandler<Configuration> _configurationHandler;
+        private readonly ILogger _logger;
         private Configuration Config;
         readonly string rank = "rank";
         string rankName = "none";
 
 
 
-        public string Name => "ClanTagRankApi";
+        public string Name => "ClanTagRankCommands";
 
-        public float Version => 1.3f;
+        public float Version => 1.31f;
 
         public string Author => "INSANEMODE";
 
         private readonly IMetaService _metaService;
 
-        public Plugin(IMetaService metaService, IConfigurationHandlerFactory configurationHandlerFactory) 
+        public Plugin(IMetaService metaService, IConfigurationHandlerFactory configurationHandlerFactory, ILogger<Plugin> logger) 
         {
+            _logger = logger;
             _metaService = metaService;
-            _configurationHandler = (IConfigurationHandler<Configuration>)configurationHandlerFactory.GetConfigurationHandler<Configuration>("ClanTagRankApi");
+            _configurationHandler = (IConfigurationHandler<Configuration>)configurationHandlerFactory.GetConfigurationHandler<Configuration>("ClanTagRankCommands");
         }
         public Task OnLoadAsync(IManager manager)// => Task.CompletedTask;
         {
@@ -41,7 +45,7 @@ namespace ClanTagRankApi
             Config = _configurationHandler.Configuration();
             string version = manager.Version;
             string str = string.Format("Loaded {0} ({1}) by {2} in {3} ({4})!", (object)((IPlugin)this).Name, (object)((IPlugin)this).Version, (object)((IPlugin)this).Author, (object)"IW4MAdmin", (object)version);
-            manager.GetLogger(0L).WriteVerbose(str);
+            _logger.LogInformation(str);
             
             return Task.CompletedTask;
         }
@@ -51,7 +55,7 @@ namespace ClanTagRankApi
             {
                 Thread.Sleep(10000);
                 var rank_player_var = await _metaService.GetPersistentMeta(rank, E.Origin);
-                rankName = E.Origin.Level.ClanTag();
+                rankName = E.Origin.Level.ClanTag(Config);
 
                 rank_player_var = await _metaService.GetPersistentMeta("rank", E.Origin);
                 if (rank_player_var == null)
@@ -75,7 +79,7 @@ namespace ClanTagRankApi
                 foreach(EFClient client in currentclients)
                 {
                     var rank_player_var = await _metaService.GetPersistentMeta(rank, client);
-                    rankName = client.Level.ClanTag();
+                    rankName = client.Level.ClanTag(Config);
 
                     rank_player_var = await _metaService.GetPersistentMeta("rank", client);
                     if (rank_player_var == null)
@@ -107,6 +111,5 @@ namespace ClanTagRankApi
         public Task OnUnloadAsync() => Task.CompletedTask;
 
 
-    
     }
 }

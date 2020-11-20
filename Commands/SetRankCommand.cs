@@ -6,21 +6,34 @@ using SharedLibraryCore.Interfaces;
 using System.Threading.Tasks;
 
 
-
 namespace ClanTagRankApi.Commands
 {
+
     /// <summary>
     /// Example script command
     /// </summary>
+    /// 
+
     public class SetRankCommand : Command
     {
         readonly string rank = "rank";
         string rank_string;
         private readonly IMetaService _metaService;
+        private readonly IConfigurationHandler<Configuration> _configurationHandler;
+        private Configuration Config;
 
-        public SetRankCommand(CommandConfiguration config, ITranslationLookup lookup, IMetaService metaService) : base(config, lookup)
+
+        public SetRankCommand(CommandConfiguration config, ITranslationLookup lookup, IMetaService metaService, IConfigurationHandlerFactory configurationHandlerFactory) : base(config, lookup)
         {
             _metaService = metaService;
+            _configurationHandler = configurationHandlerFactory.GetConfigurationHandler<Configuration>("ClanTagRankCommands");
+            if (_configurationHandler.Configuration() == null)
+            {
+                _configurationHandler.Set((Configuration)new Configuration().Generate());
+                _configurationHandler.Save();
+            }
+            Config = _configurationHandler.Configuration();
+
             Name = "SetRank";
             Description = "set a user's clan tag Rank (does not give permissions)";
             Alias = "sr";
@@ -56,8 +69,9 @@ namespace ClanTagRankApi.Commands
                 rank_player_var = await _metaService.GetPersistentMeta(rank, E.Target);
                 if(rank_player_var.Value == "none" || rank_player_var.Value == "None" || rank_player_var.Value == "NONE")
                 {
+                    
                     //E.Origin.Tell(E.Target.Name + "'s rank has been reset");
-                    rank_string = E.Target.Level.ClanTag();
+                    rank_string = E.Target.Level.ClanTag(Config);
                     E.Origin.Tell(E.Target.Name + "'s rank has been reset to: " + rank_string);
 
                 }

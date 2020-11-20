@@ -6,6 +6,7 @@ using SharedLibraryCore.Interfaces;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Xsl;
 
 namespace WebfrontCore.Controllers.API
 {
@@ -16,9 +17,19 @@ namespace WebfrontCore.Controllers.API
         string rankName;
         EFMeta customRankName;
         private readonly IMetaService _metaService;
-        public GscApiController(IManager manager, IMetaService metaService) : base(manager)
+        private readonly IConfigurationHandler<Configuration> _configurationHandler;
+        private Configuration Config;
+        public GscApiController(IManager manager, IMetaService metaService, IConfigurationHandlerFactory configurationHandlerFactory) : base(manager)
         {
             _metaService = metaService;
+            _configurationHandler = configurationHandlerFactory.GetConfigurationHandler<Configuration>("ClanTagRankCommands");
+            if (_configurationHandler.Configuration() == null)
+            {
+                _configurationHandler.Set((Configuration)new Configuration().Generate());
+                _configurationHandler.Save();
+            }
+            Config = _configurationHandler.Configuration();
+
         }
 
         /// <summary>
@@ -36,7 +47,7 @@ namespace WebfrontCore.Controllers.API
             if (clientInfo != null)
             {
 
-                rankName = clientInfo.Level.ClanTag();
+                rankName = clientInfo.Level.ClanTag(Config);
 
                 customRankName = await _metaService.GetPersistentMeta("rank", clientInfo);
                 if (customRankName == null)
@@ -70,7 +81,7 @@ namespace WebfrontCore.Controllers.API
             if (clientInfo != null)
             {
 
-                rankName = clientInfo.Level.ClanTag();
+                rankName = clientInfo.Level.ClanTag(Config);
 
                 customRankName = await _metaService.GetPersistentMeta("rank", clientInfo);
                 if (customRankName == null)
