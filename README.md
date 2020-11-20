@@ -9,6 +9,7 @@ c# plugin for iw4m-admin that interacts with ClanTagRank to set the ClanTag of p
 ```(!rr) !ResetRank <player>```
 
 by default, these require permission level Admin or above, this can be changed,
+
 along with the command names and alias in ```./Configuration/CommnadConfiguration.json```
 
 # Installation
