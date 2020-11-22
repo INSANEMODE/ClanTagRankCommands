@@ -70,7 +70,7 @@ namespace ClanTagRankApi
 
                 }
 
-                await S.ExecuteCommandAsync("setrank" + " " + E.Origin.ClientNumber + " " + rankName);
+                await S.ExecuteCommandAsync("setclantag" + " " + E.Origin.ClientNumber + " " + rankName);
             }
             if (E.Type == GameEvent.EventType.Start || E.Type == GameEvent.EventType.MapEnd || E.Type == GameEvent.EventType.MapChange)
             {
