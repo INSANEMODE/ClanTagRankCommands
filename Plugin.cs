@@ -23,7 +23,7 @@ namespace ClanTagRankApi
 
         public string Name => "ClanTagRankCommands";
 
-        public float Version => 1.41f;
+        public float Version => 1.42f;
 
         public string Author => "INSANEMODE";
 
@@ -53,7 +53,7 @@ namespace ClanTagRankApi
         {
             if (E.Type == GameEvent.EventType.Join ||E.Type == GameEvent.EventType.ChangePermission)
             {
-                Thread.Sleep(10000);
+                Thread.Sleep(1000);
                 var rank_player_var = await _metaService.GetPersistentMeta(rank, E.Origin);
                 rankName = E.Origin.Level.ClanTag(Config);
 
@@ -74,7 +74,7 @@ namespace ClanTagRankApi
             }
             if (E.Type == GameEvent.EventType.Start || E.Type == GameEvent.EventType.MapEnd || E.Type == GameEvent.EventType.MapChange)
             {
-                Thread.Sleep(10000);
+                Thread.Sleep(1000);
                 IList<EFClient> currentclients = E.Owner.Manager.GetActiveClients();
                 foreach(EFClient client in currentclients)
                 {
