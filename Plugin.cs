@@ -23,7 +23,7 @@ namespace ClanTagRankApi
 
         public string Name => "ClanTagRankCommands";
 
-        public float Version => 1.31f;
+        public float Version => 1.32f;
 
         public string Author => "INSANEMODE";
 
@@ -70,7 +70,7 @@ namespace ClanTagRankApi
 
                 }
 
-                await S.ExecuteCommandAsync("setrank" + " " + E.Origin.ClientNumber + " " + rankName);
+                await S.ExecuteCommandAsync("setclantag" + " " + E.Origin.ClientNumber + " " + rankName);
             }
             if (E.Type == GameEvent.EventType.Start || E.Type == GameEvent.EventType.MapEnd || E.Type == GameEvent.EventType.MapChange)
             {
