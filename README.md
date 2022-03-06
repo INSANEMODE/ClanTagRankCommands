@@ -1,6 +1,6 @@
 # ClanTagRankCommands
 
-# This Project is unmaintained, and no longer works on latest versions of IW4M-Admin.
+# This project is unmaintained, and no longer works on latest versions of IW4M-Admin.
 
 Please considor making your own plugin, and pair it with https://github.com/fedddddd/t6-gsc-utils for functions like setting clan tag, renaming, etc.
 
